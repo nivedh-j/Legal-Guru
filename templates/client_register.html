@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<style>
+    .container {
+        width: 100%;
+        max-width: 900px;
+        margin: 50px auto;
+        background: #222;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+        text-align: center;
+        color: #ff4d4d;
+        margin-bottom: 20px;
+    }
+    form {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .form-group label {
+        color: #ccc;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+    .form-group input,
+    .form-group select {
+        padding: 10px;
+        background: #fff;
+        border: 1px solid #444;
+        border-radius: 4px;
+        color: #333;
+    }
+    .form-group input:focus,
+    .form-group select:focus {
+        border-color: #ff4d4d;
+        outline: none;
+        box-shadow: 0 0 5px rgba(255, 77, 77, 0.5);
+    }
+    button {
+        padding: 12px;
+        background: #ff4d4d;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        width: 100%;
+        margin-top: 20px;
+    }
+    button:hover {
+        background: #e63e3e;
+    }
+    @media (max-width: 768px) {
+        form {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="container">
+    <h2>Register as a Client</h2>
+    <form action="{% url 'clientregister' %}" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+        {% csrf_token %}
+
+        <!-- First Name -->
+        <div class="form-group">
+            <label for="first_name">First Name</label>
+            <input type="text" id="first_name" name="first_name" placeholder="Enter your first name" pattern="[A-Za-z]+" required>
+        </div>
+
+        <!-- Last Name -->
+        <div class="form-group">
+            <label for="last_name">Last Name</label>
+            <input type="text" id="last_name" name="last_name" placeholder="Enter your last name" pattern="[A-Za-z]+" required>
+        </div>
+
+        <!-- Gender -->
+        <div class="form-group">
+            <label for="gender">Gender</label>
+            <select id="gender" name="gender" required>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+
+        <!-- House Name -->
+        <div class="form-group">
+            <label for="hname">House Name</label>
+            <input type="text" id="hname" name="hname" placeholder="Enter your house name" pattern="[0-9]+" required>
+        </div>
+
+        <!-- Place -->
+        <div class="form-group">
+            <label for="place">Place</label>
+            <input type="text" id="place" name="place" placeholder="Enter your place" pattern="[A-Za-z ]+" required>
+        </div>
+
+        <!-- State -->
+        <div class="form-group">
+            <label for="state">State</label>
+            <input type="text" id="state" name="state" value="Kerala" readonly required>
+        </div>
+
+        <!-- District -->
+        <div class="form-group">
+            <label for="district">District</label>
+            <select id="district" name="district" required>
+                <option value="Thiruvananthapuram">Thiruvananthapuram</option>
+                <option value="Kollam">Kollam</option>
+                <option value="Pathanamthitta">Pathanamthitta</option>
+                <option value="Alappuzha">Alappuzha</option>
+                <option value="Kottayam">Kottayam</option>
+                <option value="Idukki">Idukki</option>
+                <option value="Ernakulam">Ernakulam</option>
+                <option value="Thrissur">Thrissur</option>
+                <option value="Palakkad">Palakkad</option>
+                <option value="Malappuram">Malappuram</option>
+                <option value="Kozhikode">Kozhikode</option>
+                <option value="Wayanad">Wayanad</option>
+                <option value="Kannur">Kannur</option>
+                <option value="Kasaragod">Kasaragod</option>
+            </select>
+        </div>
+
+        <!-- Post Office -->
+        <div class="form-group">
+            <label for="postoffice">Post Office</label>
+            <input type="text" id="postoffice" name="postoffice" placeholder="Enter your post office" pattern="[A-Za-z ]+" required>
+        </div>
+
+        <!-- Pincode -->
+        <div class="form-group">
+            <label for="pin">Pincode</label>
+            <input type="text" id="pin" name="pin" placeholder="Enter your pincode" pattern="\d{6}" required>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+        </div>
+
+        <!-- Contact Number -->
+        <div class="form-group">
+            <label for="contactno">Contact Number</label>
+            <input type="text" id="contactno" name="contactno" placeholder="Enter your contact number" pattern="\d{10}" required>
+        </div>
+
+        <!-- Profile Image -->
+        <div class="form-group">
+            <label for="image">Profile Image</label>
+            <input type="file" id="image" name="image" required>
+        </div>
+
+        <!-- Aadhar Number -->
+        <div class="form-group">
+            <label for="aadharno">Aadhar Number</label>
+            <input type="text" id="aadharno" name="aadharno" placeholder="Enter your Aadhar number" maxlength="12" minlength="12" pattern="\d{12}" required>
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="form-group">
+            <label for="confirm_password">Confirm Password</label>
+            <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm your password" required>
+        </div>
+
+        <button type="submit">Register</button>
+    </form>
+</div>
+
+<!--<script type="text/javascript">-->
+<!--    function validateForm() {-->
+<!--        const password = document.getElementById('password').value;-->
+<!--        const confirmPassword = document.getElementById('confirm_password').value;-->
+
+<!--        if (password !== confirmPassword) {-->
+<!--            alert('Passwords do not match!');-->
+<!--            return false;-->
+<!--        }-->
+<!--        return true;-->
+<!--    }-->
+<!--</script>-->
+
+{% if messages %}
+    <script type="text/javascript">
+        {% for message in messages %}
+            alert("{{ message }}");
+        {% endfor %}
+    </script>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "advbase.html" %}
+{% load static %}
+{% load template_filters %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="d-flex flex-column text-center mb-5">
+        <h4 class="text-primary font-weight-bold">Chat List</h4>
+        <h4 class="display-4 font-weight-bold">Manage Your Chats</h4>
+    </div>
+
+    <table class="table table-striped table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>#</th>
+                <th>Message From</th>
+                <th>Last Message</th>
+                <th>Message Date</th>
+                <th>Reply</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for chat in chats %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ chat.sender.username }}</td>  <!-- Display sender's username -->
+                <td>{{ chat.content }}</td>
+                <td>{{ chat.created_at|date:"Y-m-d" }}</td>
+                <td>
+                    <!-- Reply Section -->
+                    <button class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#replyForm{{ chat.id }}" aria-expanded="false" aria-controls="replyForm{{ chat.id }}">
+                        Reply
+                    </button>
+
+                    <!-- Collapsible Reply Form -->
+                    <div class="collapse" id="replyForm{{ chat.id }}">
+                        <div class="card card-body mt-2">
+                            <form method="POST" action="{% url 'advchat_list' %}">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <input type="hidden" name="chat_id" value="{{ chat.id }}">
+                                    <textarea name="message" class="form-control" placeholder="Write your reply..." rows="3"></textarea>
+                                </div>
+
+                                {% if chat.reply_to %}
+                                    <input type="hidden" name="reply_to" value="{{ chat.reply_to.id }}">
+                                {% endif %}
+
+                                <button type="submit" class="btn btn-success btn-sm">Send Reply</button>
+                            </form>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center">No chats available.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
